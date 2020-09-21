@@ -28,6 +28,7 @@ void randomLed(double repeatFunction);
 void alternateLed(double repeatFunction);
 
 void setup(){
+  ///**///
   /// pullups on for unused pins to minimize power consumption
   pinMode(4, INPUT_PULLUP);
 
@@ -42,6 +43,7 @@ void setup(){
   digitalWrite(LATCH_PIN, HIGH);
 
   analogWrite(OE_PIN, 255);
+  ///**///
 }
 
 //implement fadeTimer
