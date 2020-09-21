@@ -21,11 +21,11 @@ bool alternate;
 void fadeTimer(int delayTime);
 
 //Pattern Functions
-void scanningLed(double repeatFunction);
-void fadingLed(double repeatFunction);
+void scanLeds(double repeatFunction);
+void fadLeds(double repeatFunction);
 void binaryCount(int repeatFunction);
-void randomLed(double repeatFunction);
-void alternateLed(double repeatFunction);
+void randomLeds(double repeatFunction);
+void alternateLeds(double repeatFunction);
 
 //Comments with three slashes "///" are borrowed code from the tinyspi lib
 //cannot remember where I found the void fade() function, but it is also borrowed
@@ -55,19 +55,19 @@ void loop(){
   int repeatFunction = random(0,6);
 
   if(count == 0){
-    scanningLed(repeatFunction);
+    scanLeds(repeatFunction);
   }
   else if (count == 1){
-    fadingLed(repeatFunction);
+    fadLeds(repeatFunction);
   }
   else if (count == 2){
     binaryCount((int)repeatFunction);
   }
   else if (count == 3){
-    randomLed(repeatFunction);
+    randomLeds(repeatFunction);
   }
   else {
-    alternateLed(repeatFunction);
+    alternateLeds(repeatFunction);
   }
 }
 
@@ -92,26 +92,23 @@ void loop(){
 // Test fade
 void fadeTimer(int delayTime)
 {
-  analogWrite(OE_PIN, 255); /// First Part - Fade In from zero brightness
-  for (byte bright = 255; bright > 0; bright -= 5)
-  {                              /// loop from 255 to zero in increments of 5
-    analogWrite(OE_PIN, bright); /// and display the information / brightness of the s
-    delay(delayTime);            /// allows you to perceive the change in brightness. Reduce to make changes faster
+  analogWrite(OE_PIN, 255); 
+  for (byte bright = 255; bright > 0; bright -= 5){                              
+    analogWrite(OE_PIN, bright); 
+    delay(delayTime);            
   }
 
-  analogWrite(OE_PIN, 0); /// Second Part - Fade Out from full brightness
-  for (byte bright = 0; bright < 255; bright += 5)
-  {                              /// loop from zero to 255 in increments of 5
-    analogWrite(OE_PIN, bright); /// and display the information / brightness of the s
-    delay(delayTime);            /// can reduce this for a faster fade
+  analogWrite(OE_PIN, 0); 
+  for (byte bright = 0; bright < 255; bright += 5){                              
+    analogWrite(OE_PIN, bright); 
+    delay(delayTime);            
   }
 }
-////////////////////////////////////////////////////////
 
-void alternateLed(double repeat){
+//Alternate LEDs as so: 10101010 to 01010101
+void alternateLeds(double repeat){
   double timesRepeated = 0.0;
   analogWrite(OE_PIN, 0);
-
   while (timesRepeated < repeat){
     if (alternate == true){
      byte testByte = 85;
@@ -129,14 +126,14 @@ void alternateLed(double repeat){
      digitalWrite(LATCH_PIN, HIGH);
      alternate = true;
     }
-    timesRepeated += 0.5; // double amount of times repeated
+    timesRepeated += 0.5; 
   }
 }
 
-void scanningLed(double repeat){
+//Knightrider effect on Leds
+void scanLeds(double repeat){
   double timesRepeated = 0.0;
   analogWrite(OE_PIN, 0);
-
   while (timesRepeated < repeat){
    if (direction == true){
       for (int b = 0; b < 8; b++){
@@ -158,14 +155,14 @@ void scanningLed(double repeat){
       }
       direction = true;
     }
-    timesRepeated += 0.5; // scan from B->G counts as one, G->B counts as one
-                          // set to 0.5 to double amount of times scan occurs
+    timesRepeated += 0.5; //B->G is one repeat, G->B is another repeat
+                          //set to 0.5 to double amount of times scan occurs
   }
 }
 
-void fadingLed(double repeat){
+//Faded knightrider effect
+void fadLeds(double repeat){
   double timesRepeated = 0.0;
-  
   while (timesRepeated < repeat){
     if (direction == true){
       for (int b = 0; b < 8; b++){
@@ -187,16 +184,15 @@ void fadingLed(double repeat){
         }
         direction = true;
       }
-    timesRepeated += 1;
+    timesRepeated += 1; //G->B is one count but its slow enough to keep when using fade()
   }
 }
 
+//Light up all Leds using binary from 0 to 255
 void binaryCount(int repeat){
  int timesRepeated = 0.0;
-
  while (timesRepeated < repeat/2){ 
      for (int b = 0; b <= 255; b++) {
-    //for (int b = 0; b <= 3; b++) {
       uint8_t myByte = b;
       digitalWrite(LATCH_PIN, LOW);
       fadeTimer(10);
@@ -204,16 +200,15 @@ void binaryCount(int repeat){
       SPI.transfer(myByte);
       digitalWrite(LATCH_PIN, HIGH);
       }
-      // direction = true;
     timesRepeated += 1;
  }
- // Implement binary count in reverse direction
+ //TODO: Implement binary count in reverse direction
 }
 
-void randomLed(double repeat){
+//Randomly light up any one or more of the eight Leds
+void randomLeds(double repeat){
   double timesRepeated = 0.0;
   analogWrite(OE_PIN, 0);
- 
  while (timesRepeated < repeat){
     uint8_t myByte = random(1, 140);
     digitalWrite(LATCH_PIN, LOW);
@@ -221,6 +216,6 @@ void randomLed(double repeat){
     //delay(1000);
     SPI.transfer(myByte);
     digitalWrite(LATCH_PIN, HIGH);
-    timesRepeated += 0.5 ;
+    timesRepeated += 0.5;
   }
 }
