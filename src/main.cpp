@@ -9,7 +9,7 @@ const int
 const byte OE_PIN(0);
 
 bool direction; // True = Green to Blue (G->B), False = Blue to Green (B->G)
-bool alternate;
+bool alternate; // test git stuff
 
 //int count;
 //double repeatFunction = 6;
