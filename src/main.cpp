@@ -9,7 +9,7 @@ const int
 const byte OE_PIN(0);
 
 bool direction; // True = Green to Blue (G->B), False = Blue to Green (B->G)
-bool alternate; // test git stuff
+bool alternate; 
 
 //int count;
 //double repeatFunction = 6;
@@ -26,6 +26,9 @@ void fadingLed(double repeatFunction);
 void binaryCount(int repeatFunction);
 void randomLed(double repeatFunction);
 void alternateLed(double repeatFunction);
+
+//Comments with three slashes "///" are borrowed code from the tinyspi lib
+//cannot remember where I found the void fade() function, but it is also borrowed
 
 void setup(){
   ///**///
